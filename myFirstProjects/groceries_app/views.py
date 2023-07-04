@@ -1,41 +1,22 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import RegisterForm
-from .models import RegisterdUser
+from .models import RegisteredUser
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-# Create your views here.
+from django.views.generic import ListView
 
-# def app_homepage(request):
-#     return render(request, 'project.html')
+
 def app_homepage(request):
-     return render(request, 'homepage.html')
+    try:
+     if usrnme:
+        userdetails:{'username':usrnme}
+        return render(request, 'loggedin.html',userdetails )
+    except:
+        return render(request, 'homepage.html')
 
 
-def app_homepage1(request):
-    return render(request, 'job.html')
 
-def app_homepage2(request):
-    return render(request, 'testsuite.html')
-def app_homepage3(request):
-    return render(request, 'base.html')
-
-def ft1_testcases(request):
-    return render(request, 'FT1 testcases.html')
-
-
-def register(request):
-
-    if request.method == "POST":
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request,"Account created successful")
-            return redirect("signin")
-    else:
-        form = RegisterForm()
-        user_info = {'form':form}
-        return render(request,"register.html",user_info)
 def about_us(request):
     return render(request, "aboutUs.html")
 
@@ -69,7 +50,7 @@ def signin(request):
         psswrd = request.POST['pswd']
 
         try:
-            user = RegisterdUser.objects.get(name=usrnme)
+            user = RegisteredUser.objects.get(name=usrnme)
             if usrnme == user.name and psswrd == user.password:
                 return redirect("loggedin")
             else:
@@ -84,7 +65,7 @@ def signin(request):
 
 def loggedin(request):
     userdetails = {'username':usrnme}
-    return render(request,"project.html",userdetails)
+    return render(request,"loggedin.html",userdetails)
 
 
 
@@ -92,3 +73,8 @@ def logout(request):
     global usrnme
     del usrnme
     return render(request,"logout.html")
+
+class UserListView(ListView):
+    model = RegisteredUser
+    template_name = "user_data.html"
+    context_object_name = "alldata"

@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class GrociresAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'grocires_app'
+    name = 'IIS_APP'
