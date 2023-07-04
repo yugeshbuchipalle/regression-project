@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+<body>
+	{% block content %}
+		{% for user in alldata %}
+			Id: {{ user.id }}<br>
+			Username: {{ user.name }}<br>
+			Email ID: {{ user.emailid }}<br><br>
+		{% endfor %}
+	{% endblock %}
+</body>

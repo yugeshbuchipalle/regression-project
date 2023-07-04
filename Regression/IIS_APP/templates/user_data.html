@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+<body>
+{% block content %}
+{% for user in alldata %}
+  <h1>JOBS</h1>
+  jobname:{{user.jobname}}<br>
+  emailid:{{user.emailid}}<br>
+  Testsuite:{{user.Testsuite}}<br>
+  envirionment:{{user.envirionment}}<br><br>
+  {% endfor %}
+{% endblock %}
+</body>
