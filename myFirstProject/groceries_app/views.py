@@ -101,7 +101,7 @@ class UserUpdateView(UserPassesTestMixin,UpdateView):
     model = RegisteredUser
     form_class = RegisterForm
     def test_func(self):
-       if self.request.is_active():
+       if self.request.user.is_active:
            return True
        else:
            return False
