@@ -4,8 +4,8 @@ from .forms import RegisterForm
 from django.contrib import messages
 from .models import RegisteredUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import ListView
-
+from django.views.generic import ListView,DetailView,CreateView,UpdateView
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 def app_homepage(request):
     try:
@@ -89,3 +89,19 @@ class UserListView(ListView):
     model = RegisteredUser
     template_name = "user_data.html"
     context_object_name = 'alldata'
+
+class UserDetailView(DetailView):
+    model = RegisteredUser
+
+class UserCreateView(CreateView):
+    model = RegisteredUser
+    form_class = RegisterForm
+
+class UserUpdateView(UserPassesTestMixin,UpdateView):
+    model = RegisteredUser
+    form_class = RegisterForm
+    def test_func(self):
+       if self.request.is_active():
+           return True
+       else:
+           return False
