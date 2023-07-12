@@ -4,7 +4,7 @@ from .forms import RegisterForm
 from django.contrib import messages
 from .models import RegisteredUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import ListView,DetailView,CreateView,UpdateView
+from django.views.generic import ListView,DetailView,CreateView,UpdateView,DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 def app_homepage(request):
@@ -105,3 +105,14 @@ class UserUpdateView(UserPassesTestMixin,UpdateView):
            return True
        else:
            return False
+
+
+class UserDeleteView(UserPassesTestMixin, DeleteView):
+    model = RegisteredUser
+    success_url = '/userlist'
+    def test_func(self):
+        if self.request.user.is_active:
+            print(self.request.user)
+            return True
+        else:
+            return False
