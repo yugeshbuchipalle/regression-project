@@ -2,6 +2,7 @@ from . import views
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from products_app import views as prod_views
 
 urlpatterns = [
     path('', views.app_homepage, name='app_homepage'),
@@ -19,7 +20,7 @@ urlpatterns = [
     path('userdelete/<int:pk>/',
          views.UserDeleteView.as_view(template_name='user_confirm_delete.html'),
          name='userdelete'),
-
+    path('products', prod_views.product_list, name='products_list'),
 ]
 
 if settings.DEBUG:

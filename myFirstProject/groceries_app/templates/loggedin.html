@@ -11,21 +11,22 @@
 <body>
 	{% block content %}
 		<form method="get" action="logout">
-    	<button type="submit" style="float: right;width: 10%; height: 30px;font-size : 15px">Logout</button>
+    		<button type="submit" style="float: right;width: 10%; height: 30px;font-size : 15px">Logout</button>
 		</form>
-		<h2>
-		<p style="text-align:center;"> Welcome {{ username }}!!
-		</p>
-		</h2>
+		<table>
+			<tr>
+				<td><img src="{{ image }}" width="60" height="60" align="right"> <br></td>
+				<td><h2>Welcome {{ username }}!! </h2></td>
+			</tr>
+		</table>
+		<hr>
 		<img src="{% static 'homepage.jpeg' %}" width="1050" height="700" style="text-align:center;">
-		<div class="container">
+	    <div class="container">
 			<p></p>
-            <a href="#">Dairy</a><br />
-            <a href="#">Beverages</a><br />
-            <a href="#">Groceries</a><br />
-            <a href="#">Fruits</a><br />
-            <a href="#">Vegetables</a><br />
-            <a href="#">Gourmet</a><br />
-    	</div>
+			<form method="get" action="products">
+				<button type="submit">View all products</button>
+			</form>
+		</div>
+
 	{% endblock %}
 </body>
