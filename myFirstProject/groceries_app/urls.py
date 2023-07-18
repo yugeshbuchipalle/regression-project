@@ -21,6 +21,7 @@ urlpatterns = [
          views.UserDeleteView.as_view(template_name='user_confirm_delete.html'),
          name='userdelete'),
     path('products', prod_views.product_list, name='products_list'),
+    path('order',prod_views.order,name='order'),
 ]
 
 if settings.DEBUG:

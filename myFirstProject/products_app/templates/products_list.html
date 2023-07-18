@@ -18,6 +18,8 @@
 		<form method="get" action="logout">
 	    	<button type="submit" style="float: right;width: 10%; height: 30px;font-size : 15px">Logout</button>
 	    </form>
+        <form method="POST" action="order">
+            {% csrf_token %}
         <div class="row">
             <div class="column">
                 <h2>Dairy</h2>
@@ -47,7 +49,12 @@
                     <label for={{fruit_prod}}>{{fruit_prod}}</label><br>
                 {% endfor %}
             </div>
+            <div class="container">
+                <button type="submit">submit</button>
+            </div>
         </div>
 
+
 	{% endblock %}
+            </form>
 </body>
