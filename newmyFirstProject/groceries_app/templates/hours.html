@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+<style>
+	.container{
+        width: 200%;
+        margin: 100;
+        color: green;
+        display: inline-block;
+    }
+</style>
+<body>
+	{% block content %}
+	         <table border="1"></table>
+	{% for username, hours in userdetails.items %}
+	  <h2>user {{ username }}</h2>
+	  <h4> Completed Hours {{ hours.0 }}!! </h4>
+	  <h4> Completed Hours {{ hours.1 }}!! </h4>
+	  <h4> Pendinghours {{ hours.2 }}!! </h4>
+	{% endfor %}
+	 {% endblock %}
+</body>
