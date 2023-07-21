@@ -6,7 +6,8 @@ from groceries_app import models as groc_model
 from django.core.mail import send_mail
 from django.conf import settings
 
-global usrnme
+
+
 def product_list(request):
 
     products = {"dairy": ["milk", "yogurt", "cheese", "butter"],
@@ -18,13 +19,12 @@ def product_list(request):
 
 
 def order(request):
-
     if request.method == 'POST':
         prod_list = request.POST.getlist('products')
         prod_str = ",".join(prod_list)
         order_data = OrderList(wholelist=prod_str, username=groc_view.usrnme)
         order_data.save()
-        user_data = groc_model.RegisteredUser.objects.get(name=usrnme)
+        user_data = groc_model.RegisteredUser.objects.get(name=groc_view.usrnme)
         recipientlist = [user_data.emailid, ]
         send_mail(
             "Order from Loony Basket",
@@ -38,3 +38,9 @@ def order(request):
 
     else:
         return render(request, "product_list.html")
+
+
+def hourscaluclator(request):
+
+
+    return render(request, "products_list.html", products)

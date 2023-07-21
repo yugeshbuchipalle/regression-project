@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+<style>
+	.container{
+        width: 200%;
+        margin: 100;
+        color: green;
+        display: inline-block;
+    }
+</style>
+<body>
+	{% block content %}
+				<h2> Completed Hours {{ expectedhours }}!! </h2>
+				<h2> Completed Hours {{ completedhours }}!! </h2>
+				<h2> Pendinghours {{ pendinghours }}!! </h2>
+	{% endblock %}
+</body>
