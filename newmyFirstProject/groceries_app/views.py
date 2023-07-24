@@ -145,8 +145,8 @@ def myhours(request):
     completed_in_a_month = count * 9
     print("Hours completed in a month " + str(completed_in_a_month))
 
-    df = pd.read_csv("C:\\Users\\yuges\\Desktop\\hours.csv")
-
+    # df = pd.read_csv("C:\\Users\\yuges\\Desktop\\hours.csv")
+    df = pd.read_csv("hours.csv")
     df2 = df.fillna(0)
     d ={}
     for i, j in zip(list(df2['Assigned To']), list(df2['Completed Work'])):

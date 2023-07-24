@@ -14,7 +14,6 @@ completed_in_a_month = count*9
 print("Hours completed in a month "+str(completed_in_a_month))
 
 
-df = pd.read_csv("C:\\Users\\yuges\\Desktop\\hours.csv")
 completed_as_of_now = sum(df['Completed Work'])
 print("completed hours as of now "+ str(completed_as_of_now ))
 
