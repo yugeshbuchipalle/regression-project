@@ -146,6 +146,7 @@ def myhours(request):
     print("Hours completed in a month " + str(completed_in_a_month))
 
     df = pd.read_csv("C:\\Users\\yuges\\Desktop\\hours.csv")
+
     df2 = df.fillna(0)
     d ={}
     for i, j in zip(list(df2['Assigned To']), list(df2['Completed Work'])):
@@ -165,7 +166,6 @@ def myhours(request):
     #                'completedhours': completed_as_of_now,
     #                'pendinghours':pendinghours}
     userdetails = d
-    userdetails ={'yugesh': [100,10], 'suresh': [50,10]}
-
     print(d)
     return render(request, "hours.html", {'userdetails':userdetails})
+
