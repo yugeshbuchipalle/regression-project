@@ -104,13 +104,13 @@ def createtestsuite(request):
         if form.is_valid():
             form.save()
             messages.success(request,"job added")
-            return redirect("UserListView")
+            return redirect("userList")
     else:
         form = CreateTestsuiteForm()
         user_info = {'form':form}
         return render(request,"createjob.html",user_info)
 
-class UserListView(ListView):
+class userList(ListView):
     model = CreateTestsuite
     template_name = "user_data.html"
     context_object_name = "alldata"

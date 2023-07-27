@@ -1,12 +1,27 @@
 {% extends "base.html" %}
 <body>
 {% block content %}
+ <h1>JOBS</h1>
+<table border="2">
+  <thead>
+  <td>Jobname</td>
+  <td>Emailid</td>
+  <td>Testsuite</td>
+  <td>Envirionment</td>
+  </thead>
 {% for user in alldata %}
-  <h1>JOBS</h1>
-  jobname:{{user.jobname}}<br>
-  emailid:{{user.emailid}}<br>
-  Testsuite:{{user.Testsuite}}<br>
-  envirionment:{{user.envirionment}}<br><br>
-  {% endfor %}
-{% endblock %}
+  <tbody>
+  <tr>
+    <td>{{user.jobname}}</td>
+    <td>{{user.emailid}}</td>
+    <td>{{user.Testsuite}}</td>
+    <td>{{user.envirionment}}</td>
+    <form method="get" action="signin">
+    <td><button>Trigger</button></td>
+    </form>
+    {% endfor %}
+    {% endblock %}
+  </tr>
+  </tbody>
+  </table>
 </body>

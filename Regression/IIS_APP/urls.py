@@ -16,7 +16,7 @@ urlpatterns = [
     path('signin', views.signin, name='signin'),
     path('loggedin', views.loggedin, name='loggedin'),
     path('logout', views.logout, name="logout"),
-    path('userList',views.UserListView.as_view(), name="userList"),
+    path('userList',views.userList.as_view(), name="userList"),
     path('createtestsuite', views.createtestsuite, name="createtestsuite")
 
 ]
