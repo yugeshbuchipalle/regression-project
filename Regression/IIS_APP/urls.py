@@ -17,6 +17,7 @@ urlpatterns = [
     path('loggedin', views.loggedin, name='loggedin'),
     path('logout', views.logout, name="logout"),
     path('userList',views.userList.as_view(), name="userList"),
-    path('createtestsuite', views.createtestsuite, name="createtestsuite")
+    path('createtestsuite', views.createtestsuite, name="createtestsuite"),
+    path('hoursupload', views.hoursupload, name="hoursupload"),
 
 ]

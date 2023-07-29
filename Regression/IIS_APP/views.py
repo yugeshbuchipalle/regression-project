@@ -60,8 +60,9 @@ def register(request):
     else:
         form = RegisterForm()
         user_info = {'form': form}
-        return render(request, "register.html", user_info)
-
+        # return render(request, "register.html", user_info)
+    registered_models = CreateTestsuite.objects.all()
+    return render(request, 'register.html', {'form': form, 'registered_models': registered_models})
 
 
 def signin(request):
@@ -86,10 +87,12 @@ def signin(request):
         return render(request, "signin.html")
 
 def loggedin(request):
+    global usrnme
     userdetails = {'username':usrnme}
     return render(request,"project.html",userdetails)
 
-
+def hoursupload(request):
+    return render(request,"csv_uploader.html")
 
 def logout(request):
     global usrnme
@@ -98,15 +101,20 @@ def logout(request):
 
 
 def createtestsuite(request):
+    global usrnme
     if request.method == "POST":
         form = CreateTestsuiteForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request,"job added")
-            return redirect("userList")
+            registered_models = CreateTestsuite.objects.all()
+            user_info = {'form': form, 'registered_models': registered_models}
+            return render(request, "createjob.html", user_info)
+            # return redirect("userList")
     else:
         form = CreateTestsuiteForm()
-        user_info = {'form':form}
+        registered_models = CreateTestsuite.objects.all()
+        user_info = {'form':form, 'registered_models': registered_models}
         return render(request,"createjob.html",user_info)
 
 class userList(ListView):
