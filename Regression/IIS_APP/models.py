@@ -26,3 +26,4 @@ class CreateTestsuite(models.Model):
     emailid = models.CharField(max_length=100)
     Testsuite = models.CharField(max_length=100, choices=Testsuites, default='Fullregtestsuite')
     envirionment = models.CharField(max_length=100, choices=Envirionment, default='FT1')
+

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+<style>
+	.container{
+        width: 200%;
+        margin: 100;
+        color: green;
+        display: inline-block;
+    }
+</style>
+<body>
+	{% block content %}
+	<table border="1">
+	<thead>
+	<tr>
+		<th>User</th>
+		<th> Original hours</th>
+		<th>Completed Hours</th>
+		<th> Pendinghours</th>
+	</tr>
+	</thead>
+	{% for username, hours in userdetails.items %}
+	<tbody>
+	<tr>
+	  <td>{{ username }}</td>
+	  <td>  {{ hours.0 }} </td>
+	  <td>  {{ hours.1 }} </td>
+	  <td> {{ hours.2 }}</td>
+	{% endfor %}
+	{% endblock %}
+	</tr>
+	</tbody>
+   </table>
+</body>

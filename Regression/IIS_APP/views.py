@@ -6,6 +6,9 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 from django.views.generic import ListView
+import csv
+from .forms import CSVUploadForm
+import io
 # def app_homepage(request):
 #     return render(request, 'project.html')
 def app_homepage(request):
@@ -94,6 +97,7 @@ def loggedin(request):
 def hoursupload(request):
     return render(request,"csv_uploader.html")
 
+
 def logout(request):
     global usrnme
     del usrnme
@@ -121,3 +125,49 @@ class userList(ListView):
     model = CreateTestsuite
     template_name = "user_data.html"
     context_object_name = "alldata"
+
+
+
+import pandas as pd
+import calendar
+from datetime import datetime
+def upload_csv(request):
+    datem = datetime.today().strftime("%Y-%m")
+    yearmonth = datem.split('-')
+    month_count = calendar.monthrange(int(yearmonth[0]), int(yearmonth[1]))[1]
+    count = 0
+    for day in range(1, month_count + 1):
+        presentday = datetime(int(yearmonth[0]), int(yearmonth[1]), day)
+        if presentday.strftime('%A') not in ["Saturday", "Sunday"]:
+            count = count + 1
+
+    completed_in_a_month = count * 9
+    print("Hours completed in a month " + str(completed_in_a_month))
+    if request.method == 'POST':
+        form = CSVUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            csv_file = request.FILES['csv_file']
+            df1=pd.read_csv(csv_file)
+            df2 = df1.fillna(0)
+            print(df2)
+            d = {}
+            for i, j in zip(list(df2['Assigned To']), list(df2['Completed Work'])):
+                if i in d:
+                    d[i] = d[i] + j
+                else:
+                    d[i] = j
+            for i in d:
+                l = []
+                d[i] = [completed_in_a_month, d[i], completed_in_a_month - d[i]]
+            # decoded_file = csv_file.read().decode('utf-8')
+            # io_string = io.StringIO(decoded_file)
+            # csv_reader = csv.reader(io_string)
+            # csv_reader['Assigned To']
+            # for row in csv_reader:
+            #     # Process each row
+            #     print(row.re)
+            userdetails = d
+            return render(request, "hours.html", {'userdetails': userdetails})
+    else:
+        form = CSVUploadForm()
+    return render(request, 'upload.html', {'form': form})

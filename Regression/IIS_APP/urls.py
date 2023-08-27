@@ -19,5 +19,7 @@ urlpatterns = [
     path('userList',views.userList.as_view(), name="userList"),
     path('createtestsuite', views.createtestsuite, name="createtestsuite"),
     path('hoursupload', views.hoursupload, name="hoursupload"),
+    path('upload_csv', views.upload_csv, name="upload_csv"),
+
 
 ]

@@ -26,3 +26,5 @@ class CreateTestsuiteForm(ModelForm):
             "Testsuite": "Testsuite",
             "envirionment": "envirionment"
         }
+class CSVUploadForm(forms.Form):
+        csv_file = forms.FileField()
