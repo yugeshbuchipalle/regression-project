@@ -18,13 +18,14 @@
   </thead>
 {% for user in registered_models %}
   <tbody bgcolor="skyblue">
-  <tr>
-    <td>{{user.jobname}}</td>
-    <td>{{user.emailid}}</td>
-    <td>{{user.Testsuite}}</td>
-    <td>{{user.envirionment}}</td>
-    <form method="get" action="loggedin">
-    <td><button style="width:100%">Trigger</button></td>
+  <tr bgcolor="skyblue">
+    <form method="post" action="trigger">
+     {% csrf_token %}
+    <td><input type="buttom" name="jobname"  value={{user.jobname}}> </td>
+    <td><input type="buttom" name="emailid"  value={{user.emailid}} > </td>
+    <td><input type="buttom" name="Testsuite"  value={{user.Testsuite}} > </td>
+    <td><input type="buttom" name="envirionment"  value={{user.envirionment}}> </td>
+    <td><input type="submit" value="Submit"></td>
     </form>
     {% endfor %}
     {% endblock %}

@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import ListView
 import csv
 from .forms import CSVUploadForm
+import jenkins
 import io
 # def app_homepage(request):
 #     return render(request, 'project.html')
@@ -70,6 +71,7 @@ def register(request):
 
 def signin(request):
     global usrnme
+    print(request.POST)
     if request.method == 'POST':
         usrnme = request.POST.get('username')
         psswrd = request.POST.get('pswd')
@@ -171,3 +173,63 @@ def upload_csv(request):
     else:
         form = CSVUploadForm()
     return render(request, 'upload.html', {'form': form})
+
+def trigger(request):
+        if request.method == 'POST':
+            # Retrieve form data
+            print(request.POST)
+            jobname = request.POST.get('jobname')
+            emailid = request.POST.get('emailid')
+            Testsuite = request.POST.get('Testsuite')
+            environment = request.POST.get('envirionment')
+            job_config = """<?xml version='1.1' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <authToken>1234</authToken>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <com.katalon.jenkins.plugin.ExecuteKatalonStudioTask plugin="katalon@1.0.34">
+      <version>8.6.6</version>
+      <location></location>
+      <executeArgs>-projectPath=&quot;C:\\Users\\yuges\\Katalon Studio\\FT1\\FT1.prj&quot; -retry=0 -testSuitePath=&quot;Test Suites/{0}&quot; -browserType=&quot;Chrome&quot; -executionProfile=&quot;{1}&quot; -apiKey=&quot;5f791d0c-405a-4379-9031-05160a22f82e&quot; --config -proxy.auth.option=NO_PROXY -proxy.system.option=NO_PROXY -proxy.system.applyToDesiredCapabilities=true</executeArgs>
+      <x11Display></x11Display>
+      <xvfbConfiguration></xvfbConfiguration>
+    </com.katalon.jenkins.plugin.ExecuteKatalonStudioTask>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>""".format(Testsuite, environment)
+
+            JENKINS_URL = "http://localhost:8080/"
+            JENKINS_USERNAME = "yugeshbuchipalle"
+            JENKINS_PASSWORD = "Vijaya@238a"
+            server = jenkins.Jenkins(JENKINS_URL, username=JENKINS_USERNAME, password=JENKINS_PASSWORD)
+            server.create_job(jobname, job_config)
+            PARAMETERS = {}
+            TOKEN_NAME = "1234"
+            server.build_job(jobname, PARAMETERS, TOKEN_NAME)
+            userdetails = [jobname,emailid,Testsuite]
+        return render(request, "katalondata.html", {'userdetails': userdetails})
+
+    #     try:
+    #         user = RegisterdUser.objects.get(name=usrnme)
+    #         if usrnme == user.name and psswrd == user.password:
+    #             return redirect("loggedin")
+    #         else:
+    #             messages.info(request, "Incorrect password")
+    #             return redirect("signin")
+    #     except ObjectDoesNotExist:
+    #         messages.info(request, "The user does not exist")
+    #         return redirect("signin")
+    #
+    # else:
+    #     return render(request, "signin.html")
