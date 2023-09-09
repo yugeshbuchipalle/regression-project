@@ -12,6 +12,9 @@ import jenkins
 import io
 # def app_homepage(request):
 #     return render(request, 'project.html')
+JENKINS_URL = "http://localhost:8080/"
+JENKINS_USERNAME = "yugeshbuchipalle"
+JENKINS_PASSWORD = "Vijaya@238a"
 def app_homepage(request):
      return render(request, 'homepage.html')
 
@@ -68,9 +71,9 @@ def register(request):
     registered_models = CreateTestsuite.objects.all()
     return render(request, 'register.html', {'form': form, 'registered_models': registered_models})
 
-
+usrnme =""
 def signin(request):
-    global usrnme
+    # global usrnme
     print(request.POST)
     if request.method == 'POST':
         usrnme = request.POST.get('username')
@@ -79,6 +82,7 @@ def signin(request):
 
         try:
             user = RegisterdUser.objects.get(name=usrnme)
+
             if usrnme == user.name and psswrd == user.password:
                 return redirect("loggedin")
             else:
@@ -110,13 +114,27 @@ def createtestsuite(request):
     global usrnme
     if request.method == "POST":
         form = CreateTestsuiteForm(request.POST)
-        if form.is_valid():
+        print("form")
+        print(type(form))
+        jobname = form.data['jobname']
+        Testsuite = form.data['Testsuite']
+        environment = form.data['envirionment']
+        email = form.data['emailid']
+        existing_jobs= [i.jobname for i in CreateTestsuite.objects.all()]
+        print(existing_jobs)
+        if form.is_valid() and form.data['jobname'] not in existing_jobs:
             form.save()
             messages.success(request,"job added")
-            registered_models = CreateTestsuite.objects.all()
-            user_info = {'form': form, 'registered_models': registered_models}
-            return render(request, "createjob.html", user_info)
-            # return redirect("userList")
+            f = open("C:\\Users\\yuges\\PycharmProjects\\pythonProject4\\Regression\\IIS_APP\\jenkinsfile.txt", "r")
+            job_config = f.read().format(Testsuite, environment,email)
+
+            server = jenkins.Jenkins(JENKINS_URL, username=JENKINS_USERNAME, password=JENKINS_PASSWORD)
+            server.create_job(jobname, job_config)
+        else:
+            messages.info(request,"job name already exists")
+        registered_models = CreateTestsuite.objects.all()
+        user_info = {'form': form, 'registered_models': registered_models}
+        return render(request, "createjob.html", user_info)
     else:
         form = CreateTestsuiteForm()
         registered_models = CreateTestsuite.objects.all()
@@ -161,13 +179,6 @@ def upload_csv(request):
             for i in d:
                 l = []
                 d[i] = [completed_in_a_month, d[i], completed_in_a_month - d[i]]
-            # decoded_file = csv_file.read().decode('utf-8')
-            # io_string = io.StringIO(decoded_file)
-            # csv_reader = csv.reader(io_string)
-            # csv_reader['Assigned To']
-            # for row in csv_reader:
-            #     # Process each row
-            #     print(row.re)
             userdetails = d
             return render(request, "hours.html", {'userdetails': userdetails})
     else:
@@ -179,57 +190,12 @@ def trigger(request):
             # Retrieve form data
             print(request.POST)
             jobname = request.POST.get('jobname')
-            emailid = request.POST.get('emailid')
-            Testsuite = request.POST.get('Testsuite')
-            environment = request.POST.get('envirionment')
-            job_config = """<?xml version='1.1' encoding='UTF-8'?>
-<project>
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties/>
-  <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
-  <disabled>false</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <authToken>1234</authToken>
-  <triggers/>
-  <concurrentBuild>false</concurrentBuild>
-  <builders>
-    <com.katalon.jenkins.plugin.ExecuteKatalonStudioTask plugin="katalon@1.0.34">
-      <version>8.6.6</version>
-      <location></location>
-      <executeArgs>-projectPath=&quot;C:\\Users\\yuges\\Katalon Studio\\FT1\\FT1.prj&quot; -retry=0 -testSuitePath=&quot;Test Suites/{0}&quot; -browserType=&quot;Chrome&quot; -executionProfile=&quot;{1}&quot; -apiKey=&quot;5f791d0c-405a-4379-9031-05160a22f82e&quot; --config -proxy.auth.option=NO_PROXY -proxy.system.option=NO_PROXY -proxy.system.applyToDesiredCapabilities=true</executeArgs>
-      <x11Display></x11Display>
-      <xvfbConfiguration></xvfbConfiguration>
-    </com.katalon.jenkins.plugin.ExecuteKatalonStudioTask>
-  </builders>
-  <publishers/>
-  <buildWrappers/>
-</project>""".format(Testsuite, environment)
-
-            JENKINS_URL = "http://localhost:8080/"
-            JENKINS_USERNAME = "yugeshbuchipalle"
-            JENKINS_PASSWORD = "Vijaya@238a"
+            print("jobname")
+            print(jobname)
             server = jenkins.Jenkins(JENKINS_URL, username=JENKINS_USERNAME, password=JENKINS_PASSWORD)
-            server.create_job(jobname, job_config)
             PARAMETERS = {}
             TOKEN_NAME = "1234"
             server.build_job(jobname, PARAMETERS, TOKEN_NAME)
-            userdetails = [jobname,emailid,Testsuite]
-        return render(request, "katalondata.html", {'userdetails': userdetails})
+        return redirect("loggedin")
 
-    #     try:
-    #         user = RegisterdUser.objects.get(name=usrnme)
-    #         if usrnme == user.name and psswrd == user.password:
-    #             return redirect("loggedin")
-    #         else:
-    #             messages.info(request, "Incorrect password")
-    #             return redirect("signin")
-    #     except ObjectDoesNotExist:
-    #         messages.info(request, "The user does not exist")
-    #         return redirect("signin")
-    #
-    # else:
-    #     return render(request, "signin.html")
+

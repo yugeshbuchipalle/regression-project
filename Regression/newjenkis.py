@@ -35,6 +35,6 @@ job_config = """<?xml version='1.1' encoding='UTF-8'?>
 # server.create_job(job_name, job_config)
 PARAMETERS = {}
 TOKEN_NAME = "1234"
-job_name = "fullreg"
+job_name = "s6"
 # server.build_job(job_name,PARAMETERS,TOKEN_NAME)
 print(server.get_job_config(job_name))
