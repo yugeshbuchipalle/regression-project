@@ -1,25 +1,91 @@
-{% extends "base.html" %}
 {% load static %}
-<style>
-	.container{
-        width: 200%;
-        margin: 100;
-        color: green;
-        display: inline-block;
-    }
-</style>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("CGI.png");
+            background-color: #3498db;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        input[type="submit"]:active {
+            background-color: #3e8e41;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
 <body>
-	{% block content %}
-	<form method="get" action="signin">
-    <button type="submit" style="float: right;width: 10%; height: 30px;font-size : 15px">Sign In</button>
-	</form>
-	<form method="get" action="register">
-    <button type="submit" style="float: right;width: 10%; height: 30px;font-size : 15px">Register</button>
-	</form>
-    <h2>
-        <p style="text-align:center;"> Welcome CGI IIS
-        </p>
-        </h2>
-    <img src="\static\CGI.png" width="700" height="700" style="text-align:center;">
-	{% endblock %}
+    <div class="container">
+        <h1>Login</h1>
+
+        <form method ="post" action="signin">
+			{% csrf_token %}
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+            <label for="pswd">Password</label>
+            <input type="password" id="pswd" name="pswd" required>
+            <input type="submit" value="Login">
+        </form>
+        <p class="register-link">Don't have an account? <a href="register">Register here</a></p>
+    </div>
 </body>
+</html>
