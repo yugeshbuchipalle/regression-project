@@ -1,28 +1,72 @@
-job_config = """<?xml version='1.1' encoding='UTF-8'?>
-<project>
-  <actions/>
-  <description></description>
-  <keepDependencies>false</keepDependencies>
-  <properties/>
-  <scm class="hudson.scm.NullSCM"/>
-  <canRoam>true</canRoam>
-  <disabled>false</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
-  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <authToken>1234</authToken>
-  <triggers/>
-  <concurrentBuild>false</concurrentBuild>
-  <builders>
-    <com.katalon.jenkins.plugin.ExecuteKatalonStudioTask plugin="katalon@1.0.34">
-      <version>8.6.6</version>
-      <location></location>
-      <executeArgs>-projectPath=&quot;C:\\Users\\yuges\\Katalon Studio\\inception\\inception.prj&quot; -retry=0 -testSuitePath=&quot;Test Suites/{0}&quot; -browserType=&quot;Chrome&quot; -executionProfile=&quot;{1}&quot; -apiKey=&quot;5f791d0c-405a-4379-9031-05160a22f82e&quot; --config -proxy.auth.option=NO_PROXY -proxy.system.option=NO_PROXY -proxy.system.applyToDesiredCapabilities=true</executeArgs>
-      <x11Display></x11Display>
-      <xvfbConfiguration></xvfbConfiguration>
-    </com.katalon.jenkins.plugin.ExecuteKatalonStudioTask>
-  </builders>
-  <publishers/>
-  <buildWrappers/>
-</project>"""
+import time
 
-print(job_config.format("s5reg","FT1"))
+import requests
+
+import jenkins
+import io
+# def app_homepage(request):
+#     return render(request, 'project.html')
+JENKINS_URL = "http://localhost:8080/"
+JENKINS_USERNAME = "yugeshbuchipalle"
+JENKINS_PASSWORD = "Vijaya@238a"
+# Jenkins API endpoint to get the build history
+api_url = "http://localhost:8080/builds"
+
+# Send a GET request to the Jenkins API
+server = jenkins.Jenkins(JENKINS_URL, username=JENKINS_USERNAME, password=JENKINS_PASSWORD)
+PARAMETERS = {}
+TOKEN_NAME = "1234"
+job_name = "FT1 full testsuite"
+latest_build_info = server.get_job_info(job_name)['nextBuildNumber']
+# print(latest_build_info)
+latest_build_info = server.get_job_info(job_name)
+print(latest_build_info)
+# server.build_job("s6",PARAMETERS,TOKEN_NAME)
+# time.sleep(20)
+# print("Latest build")
+latest_build_info = server.get_job_info(job_name)['lastBuild']['number']
+# print(latest_build_info)
+
+build_info = server.get_build_info(job_name, latest_build_info)
+print(build_info)
+
+
+
+
+
+# Extract build details
+# build_number = latest_build_info['number']
+# build_result = latest_build_info['result']
+# build_timestamp = latest_build_info['timestamp']
+#
+# print(build_number)
+# print(build_result)
+# print(build_timestamp)
+
+
+
+
+
+
+
+# for build in builds_data:
+#     build_number = build['number']
+#     build_status = build['result']
+#     build_url = build['url']
+#
+#     print(f"Build Number: {build_number}")
+#     print(f"Status: {build_status}")
+#     print(f"Build URL: {build_url}")
+#     print("-" * 50)
+# print(server.get_running_builds())
+# a = server.build_job("s6", PARAMETERS, TOKEN_NAME)
+# print(a)
+# print(server.build_job("s6"))
+# if response.status_code == 200:
+#     data = response.json()
+#     print(data)
+#     jobs = data.get('jobs', [])
+#
+#
+# else:
+#     print(f"Failed to fetch build history. Status code: {response.status_code}")
