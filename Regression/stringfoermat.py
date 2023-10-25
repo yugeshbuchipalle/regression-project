@@ -20,15 +20,17 @@ job_name = "FT1 full testsuite"
 latest_build_info = server.get_job_info(job_name)['nextBuildNumber']
 # print(latest_build_info)
 latest_build_info = server.get_job_info(job_name)
-print(latest_build_info)
+# print(latest_build_info)
 # server.build_job("s6",PARAMETERS,TOKEN_NAME)
 # time.sleep(20)
 # print("Latest build")
+job_name = "pytestpassinggit"
 latest_build_info = server.get_job_info(job_name)['lastBuild']['number']
 # print(latest_build_info)
 
 build_info = server.get_build_info(job_name, latest_build_info)
 print(build_info)
+
 
 
 
