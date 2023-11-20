@@ -1,7 +1,9 @@
+import time
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import RegisterForm,CreateTestsuiteForm
-from .models import RegisterdUser,CreateTestsuite
+from .models import RegisterdUser,CreateTestsuite,Result
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
@@ -10,6 +12,9 @@ import csv
 from .forms import CSVUploadForm
 import jenkins
 import io
+import random
+import serializers
+import ast
 # def app_homepage(request):
 #     return render(request, 'project.html')
 JENKINS_URL = "http://localhost:8080/"
@@ -32,6 +37,7 @@ def ft1_testcases(request):
 
 def job(request):
     return render(request, 'FT1 testcases.html')
+
 
 
 def register(request):
@@ -97,7 +103,8 @@ def signin(request):
 
 def loggedin(request):
     global usrnme
-    userdetails = {'username':usrnme}
+    registered_models = Result.objects.all()
+    userdetails = {'username':usrnme,'registered_models': registered_models}
     return render(request,"project.html",userdetails)
 
 def hoursupload(request):
@@ -125,8 +132,11 @@ def createtestsuite(request):
         if form.is_valid() and form.data['jobname'] not in existing_jobs:
             form.save()
             messages.success(request,"job added")
-            f = open("C:\\Users\\yuges\\PycharmProjects\\pythonProject4\\Regression\\IIS_APP\\jenkinsfile.txt", "r")
-            job_config = f.read().format(Testsuite, environment,email)
+            # f = open("C:\\Users\\yuges\\PycharmProjects\\pythonProject4\\Regression\\IIS_APP\\jenkinsfile.txt", "r")
+            # job_config = f.read().format(Testsuite, environment, email)
+            f= open("C:\\Users\\yuges\\PycharmProjects\\regressiopn-project\\Regression\\IIS_APP\\pyjen.txt","r")
+            job_config = f.read().format(jobname)
+
 
             server = jenkins.Jenkins(JENKINS_URL, username=JENKINS_USERNAME, password=JENKINS_PASSWORD)
             server.create_job(jobname, job_config)
@@ -196,6 +206,71 @@ def trigger(request):
             PARAMETERS = {}
             TOKEN_NAME = "1234"
             server.build_job(jobname, PARAMETERS, TOKEN_NAME)
+            results(jobname)
         return redirect("loggedin")
 
+def results(jobname):
+    server = jenkins.Jenkins(JENKINS_URL, username=JENKINS_USERNAME, password=JENKINS_PASSWORD)
+    time.sleep(5)
+    latest_build_info = server.get_job_info(jobname)['lastBuild']['number']
+    progress = server.get_build_info(jobname, latest_build_info)["inProgress"]
+    print(progress)
+    while (progress == True):
+        progress = server.get_build_info(jobname, latest_build_info)["inProgress"]
+        print(progress)
+        print(server.get_build_info(jobname, latest_build_info)["id"])
+    latest_build_number = server.get_job_info(jobname)['lastBuild']['number']
+    result = server.get_build_test_report(jobname, latest_build_number)
+    percentage = (result['passCount'] / (result['passCount'] + result['failCount'])) * 100
+    print(percentage)
+    l = []
+    for i in result['suites'][0]['cases']:
+        l.append([i['name'], i['status']])
+    print(l)
+    model_result = Result(jobname=jobname,passed=result['passCount'], failed=result['failCount'],percentage=percentage,result_list=str(l))
+    model_result.save()
+    result_info = {'model_result': model_result}
+    # return render(request,"loggedin.html",user_info)
 
+def resultpage(request):
+    if request.method == 'POST':
+        # Retrieve form data
+        print(request.POST)
+        jobname = request.POST.get('jobname')
+        id = request.POST.get('id')
+        print("jobname")
+        print(jobname)
+        print(id)
+        resultdata = Result.objects.filter(id=id)
+        print(ast.literal_eval(list(resultdata.values())[0]['result_list']))
+        resultdata = ast.literal_eval(list(resultdata.values())[0]['result_list'])
+    return render(request, "result.html",{'resultdata':resultdata})
+
+def testresult(request):
+    l=[]
+    d = {}
+    for i in Result.objects.all():
+        l.extend(ast.literal_eval(i.result_list))
+    for i in l:
+        d1 = {'pass': 0, 'fail': 0, 'total': 0,'percentage':0}
+        # print(d.items())
+        if i[0] in d:
+            if i[1] == "PASSED":
+                # print("second time : "+ str(i[0]))
+                d[i[0]]['pass'] = d[i[0]]['pass'] + 1
+            elif i[1] == "FAILED":
+                d[i[0]]['fail'] = d[i[0]]['pass'] + 1
+        else:
+            d[i[0]] = d1
+            # print(d)
+            if i[1] == "PASSED":
+                d[i[0]]['pass'] = 1
+
+            elif i[1] == "FAILED":
+                d[i[0]]['fail'] = 1
+
+            # elif i[1] == "FAILED":
+            #     d1[i[0]]['fail'] = fail1 + 1
+        d[i[0]]['total'] = d[i[0]]['total'] + 1
+        d[i[0]]['percentage'] = (d[i[0]]['pass'] / d[i[0]]['total']) * 100
+    return render(request, "testcases.html", {'resultdata': d})

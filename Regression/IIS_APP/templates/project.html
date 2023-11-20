@@ -24,7 +24,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
     <a class="dropdown-item" href="{% url 'createtestsuite' %}">Create a job</a>
     <a class="dropdown-item" href="{% url 'app_homepage1' %}">Select testsuite</a>
-    <button class="dropdown-item" type="button">Select testcase</button>
+    <a class="dropdown-item" href="{% url 'testresult' %}">Select testsuite</a>
     <button class="dropdown-item" type="button">Last run result</button>
   </div>
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
@@ -69,39 +69,30 @@
 </div>
 <br>
 <br>
-<h2> Last Run result</h2>
-<table class="table">
-    <thead>
-    <tr>
-        <th>#</th>
-        <th>Enivirionment</th>
-        <th>Testsuite Name</th>
-        <th>Run Date</th>
-        <th>Pass percentage</th>
-        <th>report</th>
-    </tr>
-    </thead>
-    <tbody>
-       <tr>
-        <td>1</td>
-        <td>FT1</td>
-        <td>S5 reg testsuite</td>
-        <td>15 may 2023 23:00hh</td>
-        <td>92</td>
-        <td>report</td>
-
-      </tr>
-    <tr>
-        <td>2</td>
-        <td>FT2</td>
-        <td>S5 reg testsuite</td>
-        <td>16 may 2023 23:00hh</td>
-        <td>88</td>
-        <td>report</td>
-      </tr>
-    </tbody>
-
-</table>
-
+<table border="2" style="width:100%" >
+  <thead  bgcolor="yellow">
+  <td style="width:20%">Jobname</td>
+  <td style="width:20%">Passed</td>
+  <td style="width:20%">Failed</td>
+  <td style="width:20%">Percentage</td>
+  <td style="width:20%">Summaryreport</td>
+  </thead>
+{% for user in registered_models %}
+  <tbody bgcolor="skyblue">
+  <tr>
+    <td>{{user.jobname}}</td>
+    <td>{{user.passed}}</td>
+    <td>{{user.failed}}</td>
+    <td>{{user.percentage}}</td>
+      <form method="post" action="resultpage">
+        {% csrf_token %}
+         <input type="hidden" id="postjob" name="jobname" value={{user.jobname}} />
+          <input type="hidden" id="postId" name="id" value={{user.id}} />
+     <td><input type="submit" value="report"></td>
+    </form>
+    {% endfor %}
+  </tr>
+  </tbody>
+  </table>
 </body>
 </html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+</head>
+<body>
+<table border="2" style="width:100%" >
+{% for user in resultdata %}
+  <tbody bgcolor="skyblue">
+
+  <tr>
+    <td>{{ user.0 }}</td>
+    <td>{{ user.1 }}</td>
+    {% endfor %}
+  </tr>
+  </tbody>
+  </table>
+
+</body>
+</html>

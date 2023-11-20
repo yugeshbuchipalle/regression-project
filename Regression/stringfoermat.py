@@ -16,20 +16,40 @@ api_url = "http://localhost:8080/builds"
 server = jenkins.Jenkins(JENKINS_URL, username=JENKINS_USERNAME, password=JENKINS_PASSWORD)
 PARAMETERS = {}
 TOKEN_NAME = "1234"
-job_name = "FT1 full testsuite"
-latest_build_info = server.get_job_info(job_name)['nextBuildNumber']
+# job_name = "FT1 full testsuite"
+# latest_build_info = server.get_job_info(job_name)['nextBuildNumber']
 # print(latest_build_info)
+job_name = "pytestpassinggit"
 latest_build_info = server.get_job_info(job_name)
-# print(latest_build_info)
+
+latest_build_info=server.get_job_config(job_name)
+print(latest_build_info)
 # server.build_job("s6",PARAMETERS,TOKEN_NAME)
 # time.sleep(20)
 # print("Latest build")
-job_name = "pytestpassinggit"
-latest_build_info = server.get_job_info(job_name)['lastBuild']['number']
-# print(latest_build_info)
 
-build_info = server.get_build_info(job_name, latest_build_info)
-print(build_info)
+
+# job_name = "pytestpassinggit"
+# latest_build_info = server.get_job_info(job_name)['lastBuild']['number']
+# print(latest_build_info)
+progress = server.get_build_info(job_name,latest_build_info)["inProgress"]
+print(progress)
+while(progress==True):
+  progress = server.get_build_info(job_name,latest_build_info)["inProgress"]
+  print(progress)
+  print(server.get_build_info(job_name,latest_build_info)["id"])
+#
+#
+# result = server.get_build_test_report(job_name,latest_build_info)
+# print(result)
+# print(result['passCount'])
+# print(result['failCount'])
+# percentage = (result['passCount']/(result['passCount']+result['failCount']))*100
+# print(percentage)
+# l= []
+# for i in result['suites'][0]['cases']:
+#     l.append([i['name'],i['status']])
+# print(l)
 
 
 
@@ -72,3 +92,7 @@ print(build_info)
 #
 # else:
 #     print(f"Failed to fetch build history. Status code: {response.status_code}")
+a= [['test_add_positive_numbers', 'PASSED'], ['test_add_negative_numbers', 'PASSED'], ['test_add_mixed_numbers', 'PASSED'], ['test_new', 'PASSED'], ['test_fail', 'FAILED']]
+d = {}
+for i in a:
+  print(i)

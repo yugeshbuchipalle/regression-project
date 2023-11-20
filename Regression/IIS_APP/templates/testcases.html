@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+</head>
+<body>
+<table border="2" style="width:100%" >
+       <thead  bgcolor="yellow">
+  <td style="width:20%">Testcase</td>
+  <td style="width:20%">Passed</td>
+  <td style="width:20%">Failed</td>
+  <td style="width:20%">total</td>
+  <td style="width:20%">percentage</td>
+  </thead>
+{% for key, value in resultdata.items %}
+  <tbody bgcolor="skyblue">
+  <tr>
+    <td>{{ key }}</td>
+    <td>{{ value.pass }}</td>
+      <td>{{ value.fail }}</td>
+      <td>{{ value.total }}</td>
+      <td>{{ value.percentage }}</td>
+    {% endfor %}
+  </tr>
+  </tbody>
+  </table>
+</body>
+</html>

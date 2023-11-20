@@ -21,6 +21,8 @@ urlpatterns = [
     path('hoursupload', views.hoursupload, name="hoursupload"),
     path('upload_csv', views.upload_csv, name="upload_csv"),
     path('trigger', views.trigger, name="trigger"),
+    path('resultpage', views.resultpage, name="resultpage"),
+    path('testresult', views.testresult, name="testresult"),
 
 
 ]

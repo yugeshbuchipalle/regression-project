@@ -27,3 +27,10 @@ class CreateTestsuite(models.Model):
     Testsuite = models.CharField(max_length=100, choices=Testsuites, default='Fullregtestsuite')
     envirionment = models.CharField(max_length=100, choices=Envirionment, default='FT1')
 
+
+class Result(models.Model):
+    jobname = models.CharField(max_length=100)
+    passed = models.CharField(max_length=100)
+    failed = models.CharField(max_length=100)
+    percentage = models.CharField(max_length=100)
+    result_list = models.CharField(max_length=2000,null=True)
