@@ -25,7 +25,7 @@
     <td>{{user.envirionment}}</td>
     <form method="post" action="trigger">
         {% csrf_token %}
-         <input type="hidden" id="postId" name="jobname" value={{user.jobname}} />
+         <input type="hidden" id="postId" name="jobname" value="{{user.jobname}}" />
      <td><input type="submit" value="submit"></td>
     </form>
     {% endfor %}
